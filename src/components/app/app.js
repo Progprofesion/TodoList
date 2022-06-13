@@ -9,9 +9,9 @@ import './app.css';
 function App() {
 
     const data = [
-        {name: 'John C.', salary: 800, increase: false, id: 1},
-        {name: 'Alex M.', salary: 3000, increase: true, id: 2},
-        {name: 'Carl W.', salary: 5000, increase: false, id: 3}
+        { name: 'John C.', salary: 800, increase: false, id: 1 },
+        { name: 'Alex M.', salary: 3000, increase: true, id: 2 },
+        { name: 'Carl W.', salary: 5000, increase: false, id: 3 }
     ];
 
     return (
@@ -19,12 +19,14 @@ function App() {
             <AppInfo />
 
             <div className="search-panel">
-                <SearchPanel/>
-                <AppFilter/>
+                <SearchPanel />
+                <AppFilter />
             </div>
-            
-            <EmployeesList data={data}/>
-            <EmployeesAddForm/>
+
+            <EmployeesList
+                data={data}
+                onDelete={id => console.log(id)} />
+            <EmployeesAddForm />
         </div>
     );
 }
