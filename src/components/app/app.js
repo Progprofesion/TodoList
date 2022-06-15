@@ -16,7 +16,8 @@ class App extends Component {
                 { name: 'John C.', salary: 800, increase: false, rise: true, id: 1 },
                 { name: 'Alex M.', salary: 3000, increase: true, rise: false, id: 2 },
                 { name: 'Carl W.', salary: 5000, increase: false, rise: false, id: 3 }
-            ]
+            ],
+            term: ''
         }
         this.maxId = 4;
     }
@@ -31,6 +32,12 @@ class App extends Component {
 
 
     addItem = (name, salary) => {
+
+
+        if (name.length < 3 || salary.length < 3) {
+            return
+        }
+
         const newItem = {
             name,
             salary,
@@ -46,34 +53,39 @@ class App extends Component {
         });
     }
 
-    onToggleIncrease = (id) => {
+
+    onToggleProp = (id, props) => {
         this.setState(({ data }) => ({
             data: data.map(item => {
                 if (item.id === id) {
-                    return { ...item, increase: !item.increase }
+                    return { ...item, [props]: !item[props] }
                 }
                 return item;
             })
         }))
     }
 
-    onToggleRise = (id) => {
-        this.setState(({ data }) => ({
-            data: data.map(item => {
-                if (item.id === id) {
-                    return { ...item, rise: !item.rise }
-                }
-                return item;
-            })
-        }))
+
+    searchEmp = (items, term) => {
+        if (items.length === 0) {
+            return items
+        }
+        return items.filter(item => {
+            return item.name.indexOf(term) > -1
+        })
     }
 
+
+    searchUpdate = (term) => {
+        this.setState({ term })
+    }
 
 
     render() {
+        const { data, term } = this.state;
         const employees = this.state.data.length;
         const increase = this.state.data.filter(item => item.increase).length;
-
+        const visibleData = this.searchEmp(data, term)
 
         return (
             <div className="app">
@@ -82,15 +94,15 @@ class App extends Component {
                     increase={increase} />
 
                 <div className="search-panel">
-                    <SearchPanel />
+                    <SearchPanel
+                        searchUpdate={this.searchUpdate} />
                     <AppFilter />
                 </div>
 
                 <EmployeesList
-                    data={this.state.data}
+                    data={visibleData}
                     onDelete={this.deleteItem}
-                    onToggleIncrease={this.onToggleIncrease}
-                    onToggleRise={this.onToggleRise} />
+                    onToggleProp={this.onToggleProp} />
                 <EmployeesAddForm onAdd={this.addItem} />
             </div>
         );
