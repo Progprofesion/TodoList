@@ -87,11 +87,16 @@ class App extends Component {
                 return items.filter(item => item.rise)
             case 'more1000':
                 return items.filter(item => item.salary > 1000)
+            case 'reset':
+                return items
             default:
                 return items;
         }
     }
 
+    onFilterSelect = (filter) => {
+        this.setState({ filter });
+    }
 
     render() {
         const { data, term, filter } = this.state;
@@ -108,7 +113,7 @@ class App extends Component {
                 <div className="search-panel">
                     <SearchPanel
                         searchUpdate={this.searchUpdate} />
-                    <AppFilter />
+                    <AppFilter filter={filter} onFilterSelect={this.onFilterSelect} />
                 </div>
 
                 <EmployeesList
